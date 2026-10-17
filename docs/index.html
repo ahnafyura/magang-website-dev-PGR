@@ -1,0 +1,675 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Panduan Setup Web Turtle | Programming Internship, Website Dev</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<meta name="color-scheme" content="light">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-soft: #f4f7fb;
+    --text: #1b2430;
+    --muted: #5b6776;
+    --line: #dbe3ec;
+    --accent: #0b5cad;
+    --accent-soft: #e4f0fc;
+    --code-bg: #f1f5fa;
+    --code-text: #14263a;
+    --ok: #17803d;
+    --ok-soft: #e3f5e9;
+    --warn: #a15c00;
+    --warn-soft: #fff3dc;
+    --side: #f4f7fb;
+    --side-text: #2c3e52;
+    --red: #c8102e;
+  }
+  * { box-sizing: border-box; }
+  html { color-scheme: light; scroll-behavior: smooth; scroll-padding-top: 20px; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 15.5px/1.75 "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  }
+  main p, main li, main td, main .box, main details > :not(summary) { text-align: justify; text-justify: inter-word; hyphens: auto; }
+  main .lead { text-align: justify; }
+  main pre, main pre * { text-align: left; hyphens: none; }
+  .meta, .eyebrow, .pager, .diagram, th, .tag { text-align: left; }
+  a { color: var(--accent); }
+  code, pre, kbd { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace; }
+  code { background: var(--bg-soft); border: 1px solid var(--line); padding: 1px 6px; border-radius: 4px; font-size: .9em; }
+  kbd { background: var(--bg-soft); border: 1px solid var(--line); border-bottom-width: 2px; padding: 1px 6px; border-radius: 4px; font-size: .85em; }
+
+  /* Layout */
+  .side {
+    position: fixed; inset: 0 auto 0 0; width: 290px; background: var(--side); color: var(--side-text); border-right: 1px solid var(--line);
+    overflow-y: auto; padding: 22px 0 30px; z-index: 20;
+  }
+  .brand { padding: 0 22px 18px; border-bottom: 1px solid var(--line); }
+  .brand small { display: block; letter-spacing: .12em; text-transform: uppercase; font-size: 11px; color: var(--accent); }
+  .brand strong { display: block; color: #0b2239; font-size: 18px; line-height: 1.3; margin-top: 4px; }
+  .brand .bar { height: 3px; width: 54px; background: linear-gradient(90deg, #0b2239 0 50%, var(--red) 50%); margin-top: 12px; }
+  .progress { padding: 14px 22px 4px; font-size: 13px; }
+  .progress .track { height: 6px; background: #dbe3ec; border-radius: 3px; overflow: hidden; margin-top: 6px; }
+  .progress .fill { height: 100%; width: 0; background: var(--ok); transition: width .3s; }
+  .side nav { padding: 10px 10px 0; }
+  .side nav a {
+    display: flex; gap: 10px; align-items: flex-start; padding: 8px 12px; border-radius: 6px;
+    color: var(--side-text); text-decoration: none; font-size: 14.5px; line-height: 1.35;
+  }
+  .side nav a:hover { background: #e6edf5; }
+  .side nav a.active { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+  .side nav a .n {
+    flex: none; width: 22px; height: 22px; border-radius: 50%; border: 1px solid #9fb1c4;
+    font-size: 11.5px; display: grid; place-items: center; margin-top: 1px;
+  }
+  .side nav a.done .n { background: var(--ok); border-color: var(--ok); color: #fff; }
+  .side .tools { padding: 16px 22px 0; display: flex; gap: 8px; }
+  .side .tools button {
+    flex: 1; background: transparent; color: var(--side-text); border: 1px solid #b8c6d6;
+    border-radius: 6px; padding: 6px 8px; cursor: pointer; font-size: 13px;
+  }
+  .side .tools button:hover { background: #e6edf5; }
+
+  main { margin-left: 290px; padding: 36px 48px 80px; max-width: 1010px; }
+  .menu-btn {
+    display: none; position: fixed; top: 10px; left: 10px; z-index: 30; background: var(--accent); color: #fff;
+    border: 0; border-radius: 6px; padding: 8px 12px; font-size: 14px; cursor: pointer;
+  }
+
+  /* Content */
+  h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 6px; }
+  h2 { font-size: 1.5rem; margin: 0 0 4px; line-height: 1.3; }
+  h3 { font-size: 1.1rem; margin: 26px 0 8px; }
+  .lead { color: var(--muted); font-size: 1.05rem; margin: 6px 0 22px; }
+  section.step { padding: 38px 0 12px; border-top: 1px solid var(--line); }
+  section.step:first-of-type { border-top: 0; padding-top: 10px; }
+  .eyebrow { color: var(--accent); font-weight: 700; font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px 18px; color: var(--muted); font-size: .9rem; margin: 6px 0 14px; }
+  .box { border-radius: 8px; padding: 12px 16px; margin: 16px 0; border: 1px solid var(--line); background: var(--bg-soft); }
+  .box > :first-child { margin-top: 0; } .box > :last-child { margin-bottom: 0; }
+  .box.goal { background: var(--accent-soft); border-color: transparent; }
+  .box.ok { background: var(--ok-soft); border-color: transparent; }
+  .box.warn { background: var(--warn-soft); border-color: transparent; }
+  .box .t { font-weight: 700; display: block; margin-bottom: 2px; }
+  .box.ok .t { color: var(--ok); } .box.warn .t { color: var(--warn); } .box.goal .t { color: var(--accent); }
+
+  .code { position: relative; margin: 12px 0 16px; }
+  .code .label { font-size: 12px; color: var(--muted); margin-bottom: 4px; display: block; }
+  pre {
+    margin: 0; background: var(--code-bg); color: var(--code-text); border-radius: 8px;
+    padding: 14px 16px; overflow-x: auto; font-size: 13.5px; line-height: 1.55; tab-size: 2;
+  }
+  pre { border: 1px solid var(--line); }
+  pre.out { background: #ffffff; color: var(--text); border: 1px dashed #9fb1c4; }
+  .copy {
+    position: absolute; top: 24px; right: 8px; background: #ffffff; color: #1f3a57;
+    border: 1px solid #b8c6d6; border-radius: 5px; padding: 3px 9px; font-size: 12px; cursor: pointer;
+  }
+  .code.nolabel .copy { top: 8px; }
+  .copy:hover { background: #e6edf5; }
+  .copy.ok { background: var(--ok); border-color: var(--ok); color: #fff; }
+
+  ol.tasks { padding-left: 0; list-style: none; counter-reset: t; }
+  ol.tasks > li { counter-increment: t; position: relative; padding: 0 0 6px 42px; margin-bottom: 8px; }
+  ol.tasks > li::before {
+    content: counter(t); position: absolute; left: 0; top: 0; width: 28px; height: 28px; border-radius: 50%;
+    background: var(--accent); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 14px;
+  }
+  .tag { display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 8px; border-radius: 10px; margin-right: 6px; vertical-align: 1px; }
+  .tag.t1 { background: #fde2e6; color: #9a0f25; }
+  .tag.t2 { background: #fff0c9; color: #7a4d00; }
+  .tag.t3 { background: #dff3e6; color: #17652f; }
+
+  details { border: 1px solid var(--line); border-radius: 8px; padding: 0 14px; margin: 12px 0; background: var(--bg); }
+  details > summary { cursor: pointer; padding: 10px 0; font-weight: 600; }
+  details[open] > summary { border-bottom: 1px solid var(--line); margin-bottom: 8px; }
+
+  table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: .95rem; }
+  th, td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+  th { background: var(--bg-soft); }
+
+  .diagram { display: flex; flex-wrap: wrap; align-items: stretch; gap: 8px; margin: 18px 0; }
+  .diagram .node {
+    flex: 1 1 130px; background: var(--bg-soft); border: 1px solid var(--line); border-radius: 8px;
+    padding: 10px 12px; font-size: .88rem; text-align: center;
+  }
+  .diagram .node b { display: block; font-size: .95rem; }
+  .diagram .node.hi { background: var(--accent-soft); border-color: var(--accent); }
+  .diagram .arr { align-self: center; color: var(--muted); font-size: .8rem; text-align: center; min-width: 74px; }
+
+  .check { display: flex; align-items: center; gap: 10px; margin: 22px 0 6px; padding: 12px 16px; border-radius: 8px; background: var(--ok-soft); }
+  .check input { width: 18px; height: 18px; accent-color: var(--ok); }
+  .check label { cursor: pointer; font-weight: 600; color: var(--ok); }
+
+  .pager { display: flex; justify-content: space-between; gap: 12px; margin: 22px 0 0; }
+  .pager a { border: 1px solid var(--line); padding: 8px 14px; border-radius: 6px; text-decoration: none; font-size: .95rem; }
+  .pager a:hover { background: var(--bg-soft); }
+  footer { margin-top: 50px; color: var(--muted); font-size: .85rem; border-top: 1px solid var(--line); padding-top: 14px; }
+
+  @media (max-width: 900px) {
+    .side { transform: translateX(-100%); transition: transform .25s; }
+    .side.open { transform: none; box-shadow: 0 0 40px rgba(0,0,0,.4); }
+    main { margin-left: 0; padding: 60px 18px 60px; }
+    .menu-btn { display: block; }
+  }
+  @media print {
+    .side, .menu-btn, .copy, .check, .pager { display: none !important; }
+    main { margin: 0; max-width: none; padding: 0; }
+    pre { white-space: pre-wrap; border: 1px solid #999; background: #f3f3f3 !important; color: #000 !important; }
+    section.step { break-inside: avoid-page; }
+  }
+</style>
+</head>
+<body>
+
+<button class="menu-btn" id="menuBtn" aria-label="Buka daftar langkah">Daftar langkah</button>
+
+<aside class="side" id="side">
+  <div class="brand">
+    <small>Programming Internship</small>
+    <strong>Website Dev:<br>Web Turtle ROS 2</strong>
+    <div class="bar"></div>
+  </div>
+  <div class="progress">
+    <span id="progText">0 dari 9 langkah selesai</span>
+    <div class="track"><div class="fill" id="progFill"></div></div>
+  </div>
+  <nav id="nav"></nav>
+  <div class="tools">
+    <button id="resetBtn" type="button">Reset progres</button>
+  </div>
+</aside>
+
+<main>
+  <header>
+    <div class="eyebrow">Barunastra ITS 2026/2027 &middot; Programming Internship</div>
+    <h1>Panduan Setup: Menggerakkan Turtle dari Website</h1>
+    <p class="lead">Dari laptop kosong sampai kura-kura di turtlesim bergerak saat kamu menekan tombol di browser. Ikuti urut dari langkah 1. Tiap langkah punya bagian <em>Hasil yang benar</em> supaya kamu tahu langkah itu sudah beres sebelum lanjut.</p>
+  </header>
+
+  <section class="step" id="s0" data-title="Ikhtisar" data-skip="1">
+    <h2>Gambaran besar</h2>
+    <div class="box goal">
+      <span class="t">Hasil akhir</span>
+      Kamu membuka website di browser, badge berubah hijau, posisi kura-kura tampil, dan tombol (atau <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd>) menggerakkan kura-kura di jendela turtlesim.
+    </div>
+    <p>Browser tidak bisa bicara langsung dengan ROS 2. Jembatannya adalah <strong>rosbridge</strong>, yang mengubah topic ROS 2 menjadi pesan WebSocket (JSON). Di sisi web kita memakai pustaka <code>roslib</code>.</p>
+    <div class="diagram" aria-label="Alur data">
+      <div class="node"><b>Browser</b>Next.js + roslib</div>
+      <div class="arr">WebSocket<br>ws://...:9090</div>
+      <div class="node hi"><b>rosbridge</b>penerjemah JSON</div>
+      <div class="arr">topic ROS 2<br>(DDS)</div>
+      <div class="node"><b>turtlesim</b>simulasi kura-kura</div>
+    </div>
+    <table>
+      <tr><th>Arah</th><th>Topic</th><th>Tipe pesan</th><th>Peran web</th></tr>
+      <tr><td>turtle ke web</td><td>posisi kura-kura (pose)</td><td>cari sendiri di langkah 3</td><td>Subscriber</td></tr>
+      <tr><td>web ke turtle</td><td>perintah gerak (cmd_vel)</td><td><code>geometry_msgs/msg/Twist</code> (sudah tersedia di starter)</td><td>Publisher</td></tr>
+    </table>
+    <h3>Yang kamu butuhkan</h3>
+    <ul>
+      <li>Ubuntu 24.04 (langsung, dual boot, atau VM dengan RAM minimal 4 GB)</li>
+      <li>Koneksi internet, sekitar 3 GB ruang kosong</li>
+      <li>Waktu sekitar 60 sampai 90 menit (langkah 1 paling lama karena mengunduh)</li>
+    </ul>
+    <div class="box warn">
+      <span class="t">Cara membaca blok kode</span>
+      Blok gelap adalah perintah yang kamu ketik. Blok putus-putus adalah contoh keluaran yang seharusnya muncul. Angka dan waktu di keluaran boleh berbeda sedikit, itu normal. Tekan tombol <em>Salin</em> di pojok blok untuk menyalin perintah.
+    </div>
+  </section>
+
+  <section class="step" id="s1" data-title="Pasang ROS 2 Jazzy">
+    <div class="eyebrow">Langkah 1</div>
+    <h2>Pasang ROS 2 Jazzy</h2>
+    <div class="meta"><span>Waktu: 20 sampai 40 menit</span><span>Tempat: terminal</span></div>
+    <div class="box goal"><span class="t">Tujuan</span>ROS 2 Jazzy Jalisco terpasang lewat paket apt resmi.</div>
+
+    <h3>1.1 Atur locale (UTF-8)</h3>
+    <div class="code"><pre>sudo apt update &amp;&amp; sudo apt install -y locales
+sudo locale-gen en_US en_US.UTF-8
+sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
+export LANG=en_US.UTF-8</pre></div>
+
+    <h3>1.2 Aktifkan repositori universe dan tambahkan sumber ROS 2</h3>
+    <div class="code"><pre>sudo apt install -y software-properties-common curl
+sudo add-apt-repository universe
+export ROS_APT_SOURCE_VERSION=$(curl -s https://api.github.com/repos/ros-infrastructure/ros-apt-source/releases/latest | grep -F "tag_name" | awk -F\" '{print $4}')
+curl -L -o /tmp/ros2-apt-source.deb "https://github.com/ros-infrastructure/ros-apt-source/releases/download/${ROS_APT_SOURCE_VERSION}/ros2-apt-source_${ROS_APT_SOURCE_VERSION}.$(. /etc/os-release &amp;&amp; echo ${UBUNTU_CODENAME:-${VERSION_CODENAME}})_all.deb"
+sudo dpkg -i /tmp/ros2-apt-source.deb</pre></div>
+
+    <h3>1.3 Pasang ROS 2 Desktop</h3>
+    <div class="code"><pre>sudo apt update
+sudo apt upgrade -y
+sudo apt install -y ros-jazzy-desktop</pre></div>
+    <p><strong>Opsional tapi disarankan</strong> (dibutuhkan di pertemuan berikutnya untuk <code>colcon build</code>):</p>
+    <div class="code"><pre>sudo apt install -y ros-dev-tools</pre></div>
+    <div class="box warn"><span class="t">Kalau ros-dev-tools gagal karena dependensi</span>Cek <code>grep Suites /etc/apt/sources.list.d/ubuntu.sources</code>. Barisnya harus berisi <code>noble noble-updates noble-backports</code>. Kalau kurang, edit berkas itu, lalu jalankan <code>sudo apt clean &amp;&amp; sudo apt update &amp;&amp; sudo apt full-upgrade -y</code>.</div>
+
+    <div class="box ok">
+      <span class="t">Hasil yang benar</span>
+      Cek dengan perintah di bawah. Kalau keluarannya ada, instalasi berhasil.
+      <div class="code nolabel"><pre>ls /opt/ros</pre></div>
+      <pre class="out">jazzy</pre>
+    </div>
+    <details>
+      <summary>Kalau ada masalah</summary>
+      <ul>
+        <li><code>Unable to locate package ros-jazzy-desktop</code>: langkah 1.2 belum berhasil. Ulangi, lalu jalankan <code>sudo apt update</code> lagi.</li>
+        <li>Perintah <code>curl</code> ke GitHub gagal: cek internet. Di jaringan kampus, coba pindah ke hotspot HP.</li>
+        <li>Bukan Ubuntu 24.04? Jazzy hanya untuk 24.04. Cek dengan <code>lsb_release -a</code>.</li>
+      </ul>
+    </details>
+    <p>Referensi resmi: <a href="https://docs.ros.org/en/jazzy/Installation/Ubuntu-Install-Debs.html" target="_blank" rel="noopener">docs.ros.org, Ubuntu (deb packages)</a>.</p>
+  </section>
+
+  <section class="step" id="s2" data-title="Konfigurasi environment">
+    <div class="eyebrow">Langkah 2</div>
+    <h2>Konfigurasi environment ROS 2</h2>
+    <div class="meta"><span>Waktu: 5 menit</span><span>Tempat: terminal</span></div>
+    <div class="box goal"><span class="t">Tujuan</span>Setiap terminal baru langsung mengenal perintah <code>ros2</code>. Tanpa ini kamu harus mengulang langkah <em>source</em> di setiap terminal.</div>
+
+    <h3>2.1 Source secara manual (untuk memahami)</h3>
+    <div class="code"><pre>source /opt/ros/jazzy/setup.bash
+ros2 --help</pre></div>
+    <p>Jika muncul daftar perintah <code>ros2</code>, environment sudah aktif untuk terminal ini saja.</p>
+
+    <h3>2.2 Otomatiskan lewat ~/.bashrc</h3>
+    <div class="code"><pre>echo "source /opt/ros/jazzy/setup.bash" &gt;&gt; ~/.bashrc
+source ~/.bashrc</pre></div>
+    <div class="box warn"><span class="t">Pakai zsh?</span>Ganti <code>setup.bash</code> menjadi <code>setup.zsh</code> dan <code>~/.bashrc</code> menjadi <code>~/.zshrc</code>.</div>
+
+    <h3>2.3 Cek variabel environment</h3>
+    <div class="code"><pre>printenv | grep -E '^ROS_'</pre></div>
+    <pre class="out">ROS_AUTOMATIC_DISCOVERY_RANGE=SUBNET
+ROS_DISTRO=jazzy
+ROS_PYTHON_VERSION=3
+ROS_VERSION=2</pre>
+    <p>Urutan baris boleh berbeda. Setelah langkah 2.4 akan muncul satu baris tambahan <code>ROS_DOMAIN_ID=...</code>.</p>
+
+    <h3>2.4 Atur ROS_DOMAIN_ID (penting kalau satu jaringan ramai)</h3>
+    <p>Semua komputer di jaringan yang sama dengan <code>ROS_DOMAIN_ID</code> yang sama akan saling melihat topic. Supaya tidak bentrok dengan teman, pilih angka 0 sampai 101 yang unik, misalnya dua digit terakhir NRP.</p>
+    <div class="code"><pre>echo "export ROS_DOMAIN_ID=42" &gt;&gt; ~/.bashrc
+source ~/.bashrc</pre></div>
+    <div class="box ok">
+      <span class="t">Hasil yang benar</span>
+      Buka terminal baru (tanpa mengetik <em>source</em>), lalu jalankan:
+      <div class="code nolabel"><pre>echo $ROS_DISTRO $ROS_DOMAIN_ID</pre></div>
+      <pre class="out">jazzy 42</pre>
+    </div>
+    <p>Referensi: <a href="https://docs.ros.org/en/jazzy/Tutorials/Beginner-CLI-Tools/Configuring-ROS2-Environment.html" target="_blank" rel="noopener">Configuring your ROS 2 environment</a>.</p>
+  </section>
+
+  <section class="step" id="s3" data-title="Pasang turtlesim + rosbridge">
+    <div class="eyebrow">Langkah 3</div>
+    <h2>Pasang turtlesim dan rosbridge, lalu coba</h2>
+    <div class="meta"><span>Waktu: 10 menit</span><span>Tempat: 2 terminal</span></div>
+    <div class="box goal"><span class="t">Tujuan</span>Kura-kura bisa digerakkan dengan keyboard dari terminal. Ini membuktikan sisi ROS 2 sudah sehat sebelum kita menyentuh web.</div>
+
+    <h3>3.1 Pasang paket</h3>
+    <div class="code"><pre>sudo apt install -y ros-jazzy-turtlesim ros-jazzy-rosbridge-suite</pre></div>
+
+    <h3>3.2 Jalankan turtlesim</h3>
+    <p>Terminal 1:</p>
+    <div class="code"><pre>ros2 run turtlesim turtlesim_node</pre></div>
+    <p>Jendela biru dengan satu kura-kura muncul.</p>
+
+    <h3>3.3 Gerakkan dengan keyboard</h3>
+    <p>Terminal 2:</p>
+    <div class="code"><pre>ros2 run turtlesim turtle_teleop_key</pre></div>
+    <p>Pastikan terminal 2 sedang aktif (diklik), lalu tekan tombol panah. Kura-kura bergerak.</p>
+
+    <h3>3.4 Intip topic yang bekerja</h3>
+    <p>Terminal 3:</p>
+    <div class="code"><pre>ros2 topic list -t</pre></div>
+    <pre class="out">/parameter_events [rcl_interfaces/msg/ParameterEvent]
+/rosout [rcl_interfaces/msg/Log]
+/turtle1/cmd_vel [geometry_msgs/msg/Twist]
+/turtle1/color_sensor [turtlesim/msg/Color]
+/turtle1/pose [turtlesim/msg/Pose]</pre>
+    <div class="box warn">
+      <span class="t">Perhatikan hasilnya</span>
+      Nama topic dan tipe pesannya (di dalam tanda kurung siku) akan kamu butuhkan di langkah 7. Cari yang berhubungan dengan <em>pose</em> dan <em>cmd_vel</em>.
+    </div>
+    <div class="code"><pre>ros2 topic echo /turtle1/pose</pre></div>
+    <pre class="out">x: 5.544444561004639
+y: 5.544444561004639
+theta: 0.0
+linear_velocity: 0.0
+angular_velocity: 0.0
+---</pre>
+    <p>Gerakkan kura-kura lewat terminal 2 dan lihat angkanya berubah. Hentikan dengan <kbd>Ctrl</kbd>+<kbd>C</kbd>. Setelah selesai, tutup terminal 1 dan 2 juga.</p>
+
+    <div class="box ok">
+      <span class="t">Hasil yang benar</span>
+      Kura-kura bergerak dengan keyboard dan <code>ros2 topic echo /turtle1/pose</code> menampilkan angka yang berubah mengikuti gerakan.
+    </div>
+    <details>
+      <summary>Kalau ada masalah</summary>
+      <ul>
+        <li><code>ros2: command not found</code>: lakukan langkah 2 lagi, lalu buka terminal baru.</li>
+        <li>Jendela turtlesim tidak muncul di VM: aktifkan akselerasi 3D di pengaturan VM, atau gunakan Ubuntu langsung.</li>
+        <li>Kura-kura tidak bergerak: terminal teleop harus dalam keadaan aktif, klik dulu terminalnya.</li>
+      </ul>
+    </details>
+  </section>
+
+  <section class="step" id="s4" data-title="Pasang Node.js">
+    <div class="eyebrow">Langkah 4</div>
+    <h2>Pasang Node.js dan Git</h2>
+    <div class="meta"><span>Waktu: 5 sampai 10 menit</span><span>Tempat: terminal</span></div>
+    <div class="box goal"><span class="t">Tujuan</span>Node.js versi 20 atau lebih baru (dibutuhkan Next.js) dan Git terpasang.</div>
+    <div class="code"><pre>sudo apt install -y git
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash</pre></div>
+    <p>Tutup lalu buka terminal baru supaya <code>nvm</code> aktif, kemudian:</p>
+    <div class="code"><pre>nvm install 22
+node -v
+npm -v
+git --version</pre></div>
+    <div class="box ok">
+      <span class="t">Hasil yang benar</span>
+      <pre class="out">v22.x.x
+10.x.x
+git version 2.43.0</pre>
+      Angka <code>node</code> harus 20 atau lebih. Versi <code>git</code> boleh berbeda.
+    </div>
+    <details>
+      <summary>Kalau ada masalah</summary>
+      <ul>
+        <li><code>nvm: command not found</code>: terminal belum dibuka ulang. Tutup dan buka lagi.</li>
+        <li><code>node -v</code> menampilkan versi lama (misalnya v12): hapus paket lama dengan <code>sudo apt remove nodejs</code> lalu ulangi <code>nvm install 22</code>.</li>
+      </ul>
+    </details>
+  </section>
+
+  <section class="step" id="s5" data-title="Ambil starter repo">
+    <div class="eyebrow">Langkah 5</div>
+    <h2>Ambil starter repo dan pasang dependensi</h2>
+    <div class="meta"><span>Waktu: 5 menit</span><span>Tempat: terminal</span></div>
+    <div class="box goal"><span class="t">Tujuan</span>Kode starter ada di laptopmu dan semua pustaka (Next.js, roslib) terpasang.</div>
+    <div class="code"><pre>cd ~
+git clone https://github.com/ahnafyura/magang-website-dev-PGR.git starter-web-turtle
+cd starter-web-turtle
+npm install</pre></div>
+    <div class="box warn">
+      <span class="t">Tentang repo ini</span>
+      Repo starter bersifat publik, jadi tidak perlu login GitHub untuk <code>git clone</code>. Nama folder tujuan <code>starter-web-turtle</code> dipakai di semua langkah berikutnya, jangan diganti.
+    </div>
+    <h3>Kenali isi proyek</h3>
+    <table>
+      <tr><th>Berkas</th><th>Isinya</th></tr>
+      <tr><td><code>lib/rosConfig.ts</code></td><td>Alamat rosbridge dan nama topic (tempat TODO 1 dan 2)</td></tr>
+      <tr><td><code>lib/useRos.ts</code></td><td>Hook koneksi ke rosbridge dan hook subscribe</td></tr>
+      <tr><td><code>components/TeleopPanel.tsx</code></td><td>Tombol gerak dan publisher (tempat TODO 3)</td></tr>
+      <tr><td><code>components/TurtleApp.tsx</code></td><td>Halaman utama: badge, kanvas, teleop</td></tr>
+      <tr><td><code>ros/web_demo.launch.py</code></td><td>Menjalankan turtlesim dan rosbridge sekaligus</td></tr>
+    </table>
+    <div class="box ok">
+      <span class="t">Hasil yang benar</span>
+      <pre class="out">added 381 packages in 5s</pre>
+      Jumlah paket boleh berbeda. Yang penting tidak ada tulisan <code>ERR!</code> berwarna merah.
+    </div>
+    <details>
+      <summary>Kalau ada masalah</summary>
+      <ul>
+        <li><code>EACCES</code> atau izin ditolak: jangan pakai <code>sudo npm</code>. Pastikan Node dipasang lewat nvm (langkah 4).</li>
+        <li>Unduhan macet atau error sertifikat: coba hotspot HP. Jangan matikan verifikasi SSL.</li>
+      </ul>
+    </details>
+  </section>
+
+  <section class="step" id="s6" data-title="Jalankan ROS 2 dan web">
+    <div class="eyebrow">Langkah 6</div>
+    <h2>Jalankan ROS 2 dan web</h2>
+    <div class="meta"><span>Waktu: 5 menit</span><span>Tempat: 2 terminal</span></div>
+    <div class="box goal"><span class="t">Tujuan</span>Tiga komponen berjalan: turtlesim, rosbridge, dan web. Di langkah ini web memang masih belum tersambung, itu disengaja.</div>
+
+    <h3>6.1 Terminal 1: turtlesim + rosbridge</h3>
+    <div class="code"><pre>cd ~/starter-web-turtle
+ros2 launch ros/web_demo.launch.py</pre></div>
+    <pre class="out">[turtlesim_node-1] [INFO] ... Spawning turtle [turtle1] at x=[5.544445], y=[5.544445], theta=[0.000000]
+[rosbridge_websocket-2] [INFO] ... Rosbridge WebSocket server started on port 9090</pre>
+    <p>Pesan <em>started on port 9090</em> menandakan jembatan siap. Biarkan terminal ini terbuka.</p>
+
+    <h3>6.2 Terminal 2: web</h3>
+    <div class="code"><pre>cd ~/starter-web-turtle
+npm run dev</pre></div>
+    <pre class="out">  ▲ Next.js ...
+  - Local:   http://localhost:3000
+ ✓ Ready in 300ms</pre>
+    <p>Buka <a href="http://localhost:3000" target="_blank" rel="noopener">http://localhost:3000</a> di browser.</p>
+
+    <div class="box ok">
+      <span class="t">Hasil yang benar (kondisi awal starter)</span>
+      Halaman "Turtle Web" tampil dengan badge <strong>oranye</strong> ("Terputus, mencoba lagi") dan tulisan "Belum ada data pose". Itu benar. Tugasmu di langkah 7 adalah mengubahnya jadi hijau.
+    </div>
+    <details>
+      <summary>Kalau ada masalah</summary>
+      <ul>
+        <li><code>Package 'rosbridge_server' not found</code>: ulangi langkah 3.1 dan pastikan sudah <em>source</em> (langkah 2).</li>
+        <li><code>Address already in use</code> di port 9090: ada rosbridge lama yang jalan. Tutup dengan <kbd>Ctrl</kbd>+<kbd>C</kbd> di terminalnya, atau <code>pkill -f rosbridge</code>.</li>
+        <li>Port 3000 terpakai: Next.js otomatis pindah ke 3001. Buka alamat yang tertulis di terminal.</li>
+      </ul>
+    </details>
+  </section>
+
+  <section class="step" id="s7" data-title="Kerjakan 3 TODO">
+    <div class="eyebrow">Langkah 7 &middot; Inti hands-on</div>
+    <h2>Kerjakan tiga TODO</h2>
+    <div class="meta"><span>Waktu: 20 sampai 30 menit</span><span>Tempat: editor kode (misalnya VS Code)</span></div>
+    <div class="box goal"><span class="t">Tujuan</span>Mengganti subscriber dan menulis publisher sehingga web benar-benar mengendalikan kura-kura.</div>
+    <p>Buka folder proyek di editor (<code>code ~/starter-web-turtle</code>). Cari semua TODO:</p>
+    <div class="code"><pre>grep -rn "TODO" lib components</pre></div>
+    <p>Simpan berkas setiap selesai satu TODO. Next.js memuat ulang halaman otomatis, jadi kamu bisa langsung melihat efeknya.</p>
+
+    <ol class="tasks">
+      <li>
+        <strong><span class="tag t1">TODO 1</span>Perbaiki alamat rosbridge</strong><br>
+        Berkas <code>lib/rosConfig.ts</code>. Alamat sekarang salah port. Rosbridge berjalan di port yang kamu lihat di terminal 1 pada langkah 6.1.
+        <details>
+          <summary>Petunjuk</summary>
+          Format alamat: <code>ws://localhost:PORT</code>. Cari angka PORT di tulisan "started on port ...".
+        </details>
+        <div class="box ok"><span class="t">Hasil yang benar</span>Badge berubah hijau "Terhubung". Tombol teleop muncul, tapi belum menggerakkan apa pun.</div>
+      </li>
+      <li>
+        <strong><span class="tag t2">TODO 2</span>Ganti subscriber ke topic pose</strong><br>
+        Berkas <code>lib/rosConfig.ts</code>. Isi <code>POSE_TOPIC</code> dan <code>POSE_TYPE</code> dengan dua nilai yang kamu catat di langkah 3.4.
+        <details>
+          <summary>Petunjuk</summary>
+          Jalankan <code>ros2 topic list -t</code> dan cari baris yang berakhiran <code>/pose</code>. Nama topic ada di depan, tipe pesan ada di dalam tanda kurung siku.
+        </details>
+        <div class="box ok"><span class="t">Hasil yang benar</span>Teks <code>x=5.54 y=5.54 theta=0.00</code> muncul, dan panah kura-kura tampil di kanvas.</div>
+      </li>
+      <li>
+        <strong><span class="tag t3">TODO 3</span>Tulis publisher</strong><br>
+        Berkas <code>components/TeleopPanel.tsx</code>. Ada dua tempat bertanda TODO 3a dan 3b. Objek <code>pub</code> sudah dibuat, kamu hanya perlu memanggil <code>publish</code> dengan pesan <code>Twist</code>. Fungsi <code>twist(...)</code> sudah tersedia untuk membuat pesan itu.
+        <details>
+          <summary>Petunjuk</summary>
+          <code>pub.publish(pesan)</code> mengirim satu pesan. Untuk terus mengirim selama tombol ditahan, panggil di dalam <code>setInterval</code> (sudah ada kerangkanya, isinya kosong).
+        </details>
+        <div class="box ok"><span class="t">Hasil yang benar</span>Tahan tombol <kbd>▲</kbd> (atau <kbd>W</kbd>), kura-kura maju di jendela turtlesim. Lepas, kura-kura berhenti. Angka x dan y di web ikut berubah.</div>
+      </li>
+    </ol>
+
+    <h3>Mengapa 100 ms dan mengapa ada pesan berhenti?</h3>
+    <p>ROS 2 menganggap perintah gerak itu terus-menerus. Selama tombol ditahan kita mengirim 10 pesan per detik. Saat tombol dilepas kita mengirim kecepatan nol, kalau tidak kura-kura akan terus bergerak dengan kecepatan terakhir.</p>
+
+    <details>
+      <summary>Kalau ada masalah</summary>
+      <ul>
+        <li>Badge tetap merah setelah TODO 1: pastikan terminal 1 masih menyala dan menampilkan "started on port 9090". Port di <code>ROSBRIDGE_URL</code> harus sama.</li>
+        <li>Badge hijau tapi data tidak muncul: cek penulisan <code>POSE_TOPIC</code> dan <code>POSE_TYPE</code>. Awalan <code>/</code> di nama topic wajib ada, tipe pesan memakai <code>/msg/</code> di tengahnya.</li>
+        <li>Data muncul tapi kura-kura tidak bergerak: TODO 3 belum diisi di kedua tempat, atau berkas belum disimpan.</li>
+        <li>Mau melihat pesan mentah: tekan <kbd>F12</kbd>, buka tab Network, pilih koneksi <code>ws</code>, lalu tab Messages.</li>
+      </ul>
+    </details>
+  </section>
+
+  <section class="step" id="s8" data-title="Uji hasil akhir">
+    <div class="eyebrow">Langkah 8</div>
+    <h2>Uji hasil akhir</h2>
+    <div class="meta"><span>Waktu: 5 menit</span></div>
+    <div class="box goal"><span class="t">Tujuan</span>Memastikan seluruh rantai Browser, rosbridge, ROS 2, turtlesim bekerja dua arah.</div>
+    <h3>Daftar uji</h3>
+    <table>
+      <tr><th>Uji</th><th>Cara</th><th>Hasil yang benar</th></tr>
+      <tr><td>Koneksi</td><td>Lihat badge</td><td>Hijau "Terhubung"</td></tr>
+      <tr><td>Subscriber</td><td>Gerakkan kura-kura pakai <code>turtle_teleop_key</code> di terminal baru</td><td>Panah dan angka di web ikut bergerak</td></tr>
+      <tr><td>Publisher</td><td>Tahan <kbd>W</kbd> di web</td><td>Kura-kura di jendela turtlesim maju</td></tr>
+      <tr><td>Berhenti</td><td>Lepas tombol</td><td>Kura-kura berhenti</td></tr>
+      <tr><td>Putus sambung</td><td>Tutup terminal 1 lalu nyalakan lagi</td><td>Badge oranye lalu hijau lagi sendiri</td></tr>
+      <tr><td>Reset</td><td>Tombol "Reset simulasi"</td><td>Kura-kura kembali ke tengah</td></tr>
+    </table>
+    <h3>Buktikan dari terminal</h3>
+    <p>Buka terminal baru dan lihat perintah yang dikirim web:</p>
+    <div class="code"><pre>ros2 topic echo /turtle1/cmd_vel</pre></div>
+    <p>Saat kamu menahan tombol di web, muncul pesan <code>linear: x: 1.5</code> berulang. Itu bukti pesan dari browser sampai ke ROS 2.</p>
+    <div class="box ok">
+      <span class="t">Selesai</span>
+      Kalau semua baris tabel lolos, hands-on utama selesai. Tunjukkan ke pemateri.
+    </div>
+  </section>
+
+  <section class="step" id="s9" data-title="Tantangan tambahan">
+    <div class="eyebrow">Langkah 9 &middot; Opsional</div>
+    <h2>Tantangan tambahan</h2>
+    <p>Kerjakan sesuai waktu. Urutannya dari mudah ke sulit.</p>
+    <table>
+      <tr><th>Tantangan</th><th>Petunjuk</th></tr>
+      <tr><td>Tampilkan kecepatan linear di web</td><td>Pesan pose punya field <code>linear_velocity</code> dan <code>angular_velocity</code>. Tambahkan ke tipe di <code>TurtleApp.tsx</code>.</td></tr>
+      <tr><td>Ganti warna jejak</td><td><code>components/PoseCanvas.tsx</code>, cari <code>strokeStyle</code>.</td></tr>
+      <tr><td>Tombol hapus jejak</td><td>Panggil service <code>/clear</code> (tipe <code>std_srvs/srv/Empty</code>). Contohnya persis seperti fungsi <code>reset</code> di <code>TeleopPanel.tsx</code>.</td></tr>
+      <tr><td>Ganti warna pena</td><td>Service <code>/turtle1/set_pen</code> (tipe <code>turtlesim/srv/SetPen</code>) dengan field r, g, b, width, off.</td></tr>
+      <tr><td>Kendalikan turtle kedua</td><td>Panggil <code>/spawn</code>, lalu publish ke <code>/turtle2/cmd_vel</code>.</td></tr>
+      <tr><td>Slider kecepatan</td><td>Ganti angka <code>1.5</code> pada tombol dengan nilai dari state slider.</td></tr>
+    </table>
+    <div class="box warn">
+      <span class="t">Catatan keamanan</span>
+      Pada latihan ini rosbridge hanya dibuka di <code>localhost</code>. Jangan pernah membuka port 9090 ke internet tanpa autentikasi, karena siapa pun bisa menggerakkan robot. Cara mengamankannya dibahas di sesi deployment (Nginx dan VPN).
+    </div>
+  </section>
+
+  <section class="step" id="s10" data-title="Troubleshooting umum">
+    <div class="eyebrow">Lampiran</div>
+    <h2>Troubleshooting umum</h2>
+    <table>
+      <tr><th>Gejala</th><th>Penyebab paling umum</th><th>Solusi</th></tr>
+      <tr><td><code>ros2: command not found</code></td><td>Belum <em>source</em></td><td>Langkah 2, lalu buka terminal baru</td></tr>
+      <tr><td>Badge merah terus</td><td>rosbridge mati atau port salah</td><td>Cek terminal 1, cek <code>ROSBRIDGE_URL</code></td></tr>
+      <tr><td>Badge hijau, tidak ada data pose</td><td>Nama topic atau tipe salah</td><td>Samakan dengan <code>ros2 topic list -t</code></td></tr>
+      <tr><td>Data ada, kura-kura diam</td><td>Publisher belum diisi atau berkas belum disimpan</td><td>Cek TODO 3a dan 3b</td></tr>
+      <tr><td>Topic tidak terlihat dari terminal lain</td><td><code>ROS_DOMAIN_ID</code> berbeda</td><td><code>echo $ROS_DOMAIN_ID</code> harus sama di semua terminal</td></tr>
+      <tr><td>Port 9090 atau 3000 terpakai</td><td>Proses lama masih hidup</td><td><code>ss -ltnp | grep 9090</code> lalu tutup prosesnya</td></tr>
+      <tr><td>Halaman tidak berubah setelah edit</td><td>Berkas belum disimpan atau server mati</td><td>Simpan (<kbd>Ctrl</kbd>+<kbd>S</kbd>), cek terminal 2</td></tr>
+      <tr><td><code>npm install</code> gagal</td><td>Versi Node lama atau jaringan</td><td><code>node -v</code> harus 20 atau lebih, coba hotspot</td></tr>
+    </table>
+    <h3>Perintah diagnosa cepat</h3>
+    <div class="code"><pre>ros2 node list              # node yang hidup (turtlesim, rosbridge_websocket)
+ros2 topic list -t          # topic dan tipenya
+ros2 topic hz /turtle1/pose # laju pesan pose (sekitar 62 Hz)
+ss -ltn | grep -E ':(9090|3000)'  # port yang sedang dipakai</pre></div>
+    <h3>Mematikan semuanya</h3>
+    <p>Tekan <kbd>Ctrl</kbd>+<kbd>C</kbd> di terminal 1 (ROS 2) dan terminal 2 (web).</p>
+  </section>
+
+  <footer>Barunastra ITS 2026/2027 &middot; Programming Internship, Website Dev &middot; Panduan ini ditulis untuk Ubuntu 24.04 dan ROS 2 Jazzy.</footer>
+</main>
+
+<script>
+(function () {
+  var KEY = "panduan-web-turtle-progress";
+  var steps = Array.prototype.slice.call(document.querySelectorAll("section.step"));
+  var counted = steps.filter(function (s) { return !s.dataset.skip && /^s[1-8]$/.test(s.id); });
+  var state = {};
+  try { state = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { state = {}; }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+
+  // Sidebar
+  var nav = document.getElementById("nav");
+  steps.forEach(function (s, i) {
+    var a = document.createElement("a");
+    a.href = "#" + s.id; a.dataset.for = s.id;
+    var label = s.dataset.title || s.querySelector("h2").textContent;
+    var n = /^s([1-9])$/.test(s.id) ? s.id.slice(1) : (s.id === "s0" ? "0" : "+");
+    a.innerHTML = '<span class="n">' + n + "</span><span>" + label + "</span>";
+    a.addEventListener("click", function () { document.getElementById("side").classList.remove("open"); });
+    nav.appendChild(a);
+  });
+
+  // Copy buttons
+  document.querySelectorAll(".code").forEach(function (c) {
+    var pre = c.querySelector("pre");
+    if (!pre) return;
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "copy"; b.textContent = "Salin";
+    b.addEventListener("click", function () {
+      var text = pre.innerText;
+      var done = function () { b.textContent = "Tersalin"; b.classList.add("ok");
+        setTimeout(function () { b.textContent = "Salin"; b.classList.remove("ok"); }, 1400); };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, function () { fallback(text); done(); });
+      } else { fallback(text); done(); }
+    });
+    c.appendChild(b);
+  });
+  function fallback(t) {
+    var ta = document.createElement("textarea"); ta.value = t; document.body.appendChild(ta);
+    ta.select(); try { document.execCommand("copy"); } catch (e) {} document.body.removeChild(ta);
+  }
+
+  // Checklist per langkah + pager
+  steps.forEach(function (s, i) {
+    if (/^s[1-8]$/.test(s.id)) {
+      var d = document.createElement("div"); d.className = "check";
+      d.innerHTML = '<input type="checkbox" id="c-' + s.id + '"><label for="c-' + s.id + '">Langkah ini sudah selesai dan hasilnya benar</label>';
+      s.appendChild(d);
+      var cb = d.querySelector("input");
+      cb.checked = !!state[s.id];
+      cb.addEventListener("change", function () { state[s.id] = cb.checked; save(); refresh(); });
+    }
+    var p = document.createElement("div"); p.className = "pager";
+    var prev = steps[i - 1], next = steps[i + 1];
+    p.innerHTML = (prev ? '<a href="#' + prev.id + '">&larr; ' + (prev.dataset.title || "Sebelumnya") + "</a>" : "<span></span>") +
+                  (next ? '<a href="#' + next.id + '">' + (next.dataset.title || "Berikutnya") + " &rarr;</a>" : "<span></span>");
+    s.appendChild(p);
+  });
+
+  function refresh() {
+    var done = counted.filter(function (s) { return state[s.id]; }).length;
+    document.getElementById("progText").textContent = done + " dari " + counted.length + " langkah selesai";
+    document.getElementById("progFill").style.width = (done / counted.length * 100) + "%";
+    nav.querySelectorAll("a").forEach(function (a) { a.classList.toggle("done", !!state[a.dataset.for]); });
+  }
+  refresh();
+
+  // Scroll spy
+  var links = {};
+  nav.querySelectorAll("a").forEach(function (a) { links[a.dataset.for] = a; });
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          Object.keys(links).forEach(function (k) { links[k].classList.remove("active"); });
+          links[en.target.id].classList.add("active");
+        }
+      });
+    }, { rootMargin: "-10% 0px -80% 0px" });
+    steps.forEach(function (s) { io.observe(s); });
+  }
+
+  document.getElementById("resetBtn").addEventListener("click", function () {
+    if (!confirm("Hapus semua centang progres?")) return;
+    state = {}; save();
+    document.querySelectorAll(".check input").forEach(function (c) { c.checked = false; });
+    refresh();
+  });
+  document.getElementById("menuBtn").addEventListener("click", function () {
+    document.getElementById("side").classList.toggle("open");
+  });
+})();
+</script>
+</body>
+</html>
